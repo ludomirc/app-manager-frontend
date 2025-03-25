@@ -1,0 +1,32 @@
+.custom-navbar {
+  background-color: #fdfcf9;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-navbar .nav-link,
+.custom-navbar .navbar-brand {
+  color: #333;
+  font-weight: 500;
+}
+
+.custom-navbar .nav-link.active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.custom-navbar .nav-link {
+  color: #333;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+  padding-bottom: 4px;
+}
+
+.custom-navbar .nav-link:hover {
+  color: #0056b3; // soft blue or pick your own
+  border-bottom: 2px solid #0056b3;
+}
+
+.custom-navbar .nav-link.active {
+  font-weight: bold;
+  border-bottom: 2px solid #333;
+}
+

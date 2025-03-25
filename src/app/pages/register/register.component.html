@@ -1,0 +1,24 @@
+<div class="container mt-5" style="max-width: 400px;">
+  <ng-container *ngIf="!isRegistered; else thankYou">
+    <h2>Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="login" class="form-label">Login</label>
+        <input formControlName="login" type="text" class="form-control" id="login" placeholder="Enter login">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input formControlName="password" type="password" class="form-control" id="password" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-success">Create Account</button>
+    </form>
+  </ng-container>
+
+  <ng-template #thankYou>
+    <div class="text-center mt-5">
+      <h2 class="text-success">Thank you!</h2>
+      <p>Your account has been created successfully.</p>
+      <a routerLink="/login" class="btn btn-primary mt-3">Go to Login</a>
+    </div>
+  </ng-template>
+</div>

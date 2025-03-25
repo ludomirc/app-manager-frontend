@@ -1,0 +1,20 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">🗞️ My Applications</h2>
+  <button class="btn btn-outline-secondary rounded-pill px-4" (click)="onAddApplication()">
+    + Add Application
+  </button>
+</div>
+
+<div *ngFor="let app of applications" class="card mb-4 shadow-sm border-0 border-bottom pb-3">
+  <div class="card-body">
+    <h3 class="card-title">{{ app.name }}</h3>
+    <h6 class="text-muted mb-2">
+      {{ app.enterpriseName }} |
+      {{ app.creationDate | date: 'mediumDate' }}
+    </h6>
+
+    <p class="card-text lh-base fs-6" style="text-align: justify;">
+      {{ app.notes || 'No notes provided.' }}
+    </p>
+  </div>
+</div>

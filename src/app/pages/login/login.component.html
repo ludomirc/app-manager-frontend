@@ -1,0 +1,19 @@
+<div class="container mt-5" style="max-width: 400px;">
+  <h2>Login</h2>
+
+  <div *ngIf="loginFailed" class="alert alert-danger">
+    Invalid login or password.
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="login" class="form-label">Login</label>
+      <input formControlName="login" type="text" class="form-control" id="login">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input formControlName="password" type="password" class="form-control" id="password">
+    </div>
+    <button type="submit" class="btn btn-primary">Log in</button>
+  </form>
+</div>
