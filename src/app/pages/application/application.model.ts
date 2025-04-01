@@ -1,6 +1,6 @@
 export interface Application {
   applicationId?: number;
-  enterpriseId: number;
+  enterpriseId: number | null;
   enterpriseName?: string;
   creationDate?: string;
   notes: string;
