@@ -1,11 +1,15 @@
 <nav class="navbar navbar-expand px-3 custom-navbar">
-  <a class="navbar-brand" routerLink="/">App Manager</a>
+  <a class="navbar-brand" href="#" (click)="goHome($event)">App Manager</a>
   <div class="navbar-nav me-auto">
-    <a class="nav-link" routerLink="/">Home</a>
   </div>
   <div class="navbar-nav">
-    <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
-    <a class="nav-link" routerLink="/register">Register</a>
+    <ng-container *ngIf="isLoggedIn; else guestLinks">
+      <a class="nav-link" href="#" (click)="logout()">Logout</a>
+    </ng-container>
+    <ng-template #guestLinks>
+      <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+      <a class="nav-link" routerLink="/register">Register</a>
+    </ng-template>
   </div>
 </nav>
 

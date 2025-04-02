@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Application } from './application.model';
-import { EnterpriseService, Enterprise } from '../../enterprise.service';
+import { Application } from '../application.model';
+import { EnterpriseService, Enterprise } from '../../../enterprise.service';
 
 interface ApplicationFormModel extends Partial<Application> {
   newEnterpriseName: string;
@@ -13,9 +13,9 @@ interface ApplicationFormModel extends Partial<Application> {
   standalone: true,
   selector: 'app-add-application-modal',
   imports: [CommonModule, FormsModule],
-  templateUrl: './add-application-modal.component.html'
+  templateUrl: './add-application.component.html'
 })
-export class AddApplicationModalComponent implements OnInit {
+export class AddApplicationComponent implements OnInit {
   activeModal = inject(NgbActiveModal);
   enterpriseService = inject(EnterpriseService);
 

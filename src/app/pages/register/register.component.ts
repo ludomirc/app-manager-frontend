@@ -4,13 +4,14 @@ import {HttpClient} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 
 import {environment} from '../../../environments/environment';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, RouterLink]
 })
 export class RegisterComponent {
 
@@ -35,10 +36,9 @@ export class RegisterComponent {
 
       this.http.post(`${this.baseUrl}/users/register`, payload).subscribe({
         next: () => {
-          this.isRegistered = true; // ✅ show the thank-you board
+          this.isRegistered = true;
         },
         error: () => {
-          // Optionally handle failure here
           alert('Registration failed. Please try again.');
         }
       });

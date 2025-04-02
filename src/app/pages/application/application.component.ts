@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ApplicationService} from './application.service';
 import {Application} from './application.model';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AddApplicationModalComponent} from './add-application-modal.component';
+import {AddApplicationComponent} from './add-application/add-application.component';
 
 @Component({
   selector: 'app-application',
@@ -25,7 +25,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   onAddApplication() {
-    const modalRef = this.modalService.open(AddApplicationModalComponent);
+    const modalRef = this.modalService.open(AddApplicationComponent);
 
     modalRef.result.then((newApp) => {
       if (newApp) {
