@@ -5,4 +5,5 @@ export interface Application {
   creationDate?: string;
   notes: string;
   name: string;
+  currentStatus?: string;
 }
