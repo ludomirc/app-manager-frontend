@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // ✅ Import this
-import { ApplicationService } from './application.service';
-import { Application } from './application.model';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ApplicationService} from './application.service';
+import {Application} from './application.model';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AddApplicationComponent} from './add-application/add-application.component';
 
 @Component({
   selector: 'app-application',
@@ -12,7 +14,9 @@ import { Application } from './application.model';
 export class ApplicationComponent implements OnInit {
   applications: Application[] = [];
 
-  constructor(private applicationService: ApplicationService) {}
+  constructor(private applicationService: ApplicationService,
+              private modalService: NgbModal) {
+  }
 
   ngOnInit(): void {
     this.applicationService.getApplications().subscribe((data) => {
@@ -21,6 +25,18 @@ export class ApplicationComponent implements OnInit {
   }
 
   onAddApplication() {
-    console.log('Add Application clicked');
+    const modalRef = this.modalService.open(AddApplicationComponent);
+
+    modalRef.result.then((newApp) => {
+      if (newApp) {
+        this.applicationService
+          .createApplication(newApp)
+          .subscribe((created) => {
+            this.applications.push(created);
+          });
+      }
+    }).catch((reason) => {
+      console.log('Modal dismissed:', reason);
+    });
   }
 }

@@ -1,0 +1,56 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add New Application</h4>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <form>
+
+    <div class="mb-3">
+      <label class="form-label">Application Name</label>
+      <input class="form-control" [(ngModel)]="application.name" name="name">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Notes</label>
+      <textarea class="form-control" [(ngModel)]="application.notes" name="notes"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Enterprise</label>
+
+      <div *ngIf="!addingNewEnterprise">
+        <select class="form-select" [(ngModel)]="application.enterpriseId" name="enterpriseId">
+          <option [ngValue]="null">-- Select Enterprise --</option>
+          <option *ngFor="let e of enterprises" [ngValue]="e.enterpriseId">{{ e.name }}</option>
+        </select>
+        <div class="mt-2">
+          <button class="btn btn-link p-0" type="button" (click)="addingNewEnterprise = true">
+            + Add new enterprise
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="addingNewEnterprise">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="application.newEnterpriseName"
+          name="newEnterpriseName"
+          placeholder="Enter new enterprise name"
+        >
+        <div class="mt-2">
+          <button class="btn btn-link p-0" type="button" (click)="addingNewEnterprise = false">
+            ← Back to list
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cancel</button>
+  <button class="btn btn-primary" (click)="submit()">Save</button>
+</div>

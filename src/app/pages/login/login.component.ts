@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import {Component} from '@angular/core';
+import {FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
-import {environment} from '../../../environments/environment';
+import {AuthService} from '../../services/auth.service';
+import {Credentials} from '../../models/credentials';
+import {ROUTES} from '../../constants/routes';
 
 @Component({
   selector: 'app-login',
@@ -15,12 +16,14 @@ import {environment} from '../../../environments/environment';
 })
 export class LoginComponent {
 
-  private baseUrl = environment.apiUrl;
-
-  private _loginForm: FormGroup;
   loginFailed = false;
+  private _loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this._loginForm = this.fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required]
@@ -33,16 +36,14 @@ export class LoginComponent {
 
   onSubmit() {
     if (this._loginForm.valid) {
-      const payload = {
+      const payload: Credentials = {
         userName: this._loginForm.value.login,
         rawPassword: this._loginForm.value.password
       };
-
-      this.http.post<{ token: string }>(`${this.baseUrl}/users/authenticate`, payload).subscribe({
-        next: (res) => {
-          sessionStorage.setItem('appManagerAuthToken', res.token);
+      this.authService.login(payload).subscribe({
+        next: () => {
           this.loginFailed = false;
-          this.router.navigate(['/application']);
+          this.router.navigate([ROUTES.APPLICATION]);
         },
         error: () => {
           this.loginFailed = true;
