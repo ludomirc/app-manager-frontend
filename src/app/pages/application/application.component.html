@@ -7,14 +7,35 @@
 
 <div *ngFor="let app of applications" class="card mb-4 shadow-sm border-0 border-bottom pb-3">
   <div class="card-body">
-    <h3 class="card-title">{{ app.name }}</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="card-title mb-0">{{ app.name }}</h3>
+      <select
+        class="form-select form-select-sm w-auto"
+        [(ngModel)]="app.currentStatus"
+        (ngModelChange)="onStatusChange(app.applicationId!, $event)"
+        [id]="'statusSelect' + app.applicationId">
+        <option *ngFor="let status of availableStatuses" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+    </div>
+
     <h6 class="text-muted mb-2">
       {{ app.enterpriseName }} |
-      {{ app.creationDate | date: 'mediumDate' }}
+      {{ app.creationDate | date: 'mediumDate' }} |
+      {{ app.currentStatus }} |
     </h6>
 
     <p class="card-text lh-base fs-6" style="text-align: justify;">
       {{ app.notes || 'No notes provided.' }}
     </p>
+
+    <div *ngIf="app.applicationId" class="text-end mt-3">
+      <button
+        class="btn btn-outline-secondary btn-sm rounded-pill"
+        (click)="onAppStatusHistory(app.applicationId!)">
+        Show status history
+      </button>
+    </div>
   </div>
 </div>

@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <h5 class="modal-title">Status History</h5>
+  <button type="button"
+          class="btn-close"
+          aria-label="Close"
+          style="transform: scale(0.75);"
+          (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <div *ngIf="loading">Loading history...</div>
+
+  <ul *ngIf="!loading && history.length > 0" class="mt-1">
+    <li *ngFor="let entry of history" class="d-flex justify-content-between align-items-center">
+      <span>{{ entry.status }}</span>
+      <small class="text-muted">{{ entry.changedAt | date: 'short' }}</small>
+    </li>
+  </ul>
+
+  <div *ngIf="!loading && history.length === 0" class="text-muted">
+    No status history available.
+  </div>
+</div>
