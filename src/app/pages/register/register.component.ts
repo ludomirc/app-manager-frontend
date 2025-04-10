@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 
-import {environment} from '../../../environments/environment';
 import {RouterLink} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {Credentials} from '../../models/credentials';
 
 @Component({
   selector: 'app-register',
@@ -14,14 +14,16 @@ import {RouterLink} from '@angular/router';
   imports: [CommonModule, ReactiveFormsModule, RouterLink]
 })
 export class RegisterComponent {
-
-  private baseUrl = environment.apiUrl;
-
   registerForm: FormGroup;
   isRegistered = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
-    this.registerForm = this.fb.group({
+  constructor(private fb: FormBuilder,
+              private authService: AuthService) {
+    this.registerForm = this.initForm();
+  }
+
+  private initForm() {
+    return this.fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required]
     });
@@ -29,12 +31,8 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      const payload = {
-        userName: this.registerForm.value.login,
-        rawPassword: this.registerForm.value.password
-      };
-
-      this.http.post(`${this.baseUrl}/users/register`, payload).subscribe({
+      const payload = this.getCredentialFromForm();
+      this.authService.register(payload).subscribe({
         next: () => {
           this.isRegistered = true;
         },
@@ -45,4 +43,11 @@ export class RegisterComponent {
     }
   }
 
+  private getCredentialFromForm() {
+    const payload: Credentials = {
+      userName: this.registerForm.value.login,
+      rawPassword: this.registerForm.value.password
+    };
+    return payload;
+  }
 }

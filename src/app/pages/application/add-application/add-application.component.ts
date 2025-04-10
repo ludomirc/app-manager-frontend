@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Application } from '../application.model';
-import { EnterpriseService, Enterprise } from '../../../enterprise.service';
+import { Application } from '../../../models/application.model';
+import { EnterpriseService, Enterprise } from '../../../services/enterprise.service';
 
 interface ApplicationFormModel extends Partial<Application> {
   newEnterpriseName: string;

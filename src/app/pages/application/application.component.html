@@ -23,11 +23,19 @@
     <h6 class="text-muted mb-2">
       {{ app.enterpriseName }} |
       {{ app.creationDate | date: 'mediumDate' }} |
+      {{ app.currentStatus }} |
     </h6>
 
     <p class="card-text lh-base fs-6" style="text-align: justify;">
       {{ app.notes || 'No notes provided.' }}
     </p>
 
+    <div *ngIf="app.applicationId" class="text-end mt-3">
+      <button
+        class="btn btn-outline-secondary btn-sm rounded-pill"
+        (click)="onAppStatusHistory(app.applicationId!)">
+        Show status history
+      </button>
+    </div>
   </div>
 </div>

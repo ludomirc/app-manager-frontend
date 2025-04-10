@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ApplicationService} from '../../services/application.service';
-import {Application} from './application.model';
+import {Application} from '../../models/application.model';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AddApplicationComponent} from './add-application/add-application.component';
 import {StatusService} from '../../services/status.service';
 import {FormsModule} from '@angular/forms';
+import {StatusHistoryPanelComponent} from './status-history-panel/status-history-panel.component';
 
 @Component({
   selector: 'app-application',
@@ -55,5 +56,10 @@ export class ApplicationComponent implements OnInit {
         app.currentStatus = newStatus;
       }
     });
+  }
+
+  onAppStatusHistory(applicationId: number) {
+    const modalRef = this.modalService.open(StatusHistoryPanelComponent, {size: 'md'});
+    modalRef.componentInstance.applicationId = applicationId;
   }
 }

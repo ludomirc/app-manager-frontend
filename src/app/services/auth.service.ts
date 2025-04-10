@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, tap} from 'rxjs';
+import {environment} from '../../environments/environment';
 import {Credentials} from '../models/credentials';
 
 @Injectable({
@@ -9,18 +9,22 @@ import {Credentials} from '../models/credentials';
 })
 export class AuthService {
   private readonly TOKEN_KEY = 'appManagerAuthToken';
-  private readonly baseUrl = environment.apiUrl;
+  private readonly baseUrl = `${environment.apiUrl}/users`
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   login(credentials: Credentials): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/users/authenticate`, credentials).pipe(
+    return this.http.post<any>(`${this.baseUrl}/authenticate`, credentials).pipe(
       tap(response => {
-        if (response && response.token) {
+        if (response?.token) {
           sessionStorage.setItem(this.TOKEN_KEY, response.token);
         }
-      })
-    );
+      }));
+  }
+
+  register(user: Credentials): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register`, user);
   }
 
   logout(): void {
