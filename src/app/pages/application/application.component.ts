@@ -36,7 +36,7 @@ export class ApplicationComponent implements OnInit {
     this.applicationService.getApplications().subscribe((data) => {
       console.log('Loaded applications:', data);
       this.originalApplications = data;
-      this.applications = [...data]; // shallow copy
+      this.applications = [...data];
     });
   }
 
@@ -53,7 +53,6 @@ export class ApplicationComponent implements OnInit {
       return matchesName && matchesEnterprise && matchesStatus && matchesDate;
     });
   }
-
 
   onAddApplication() {
     const modalRef = this.modalService.open(AddApplicationComponent);
