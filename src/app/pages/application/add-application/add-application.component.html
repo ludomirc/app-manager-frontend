@@ -8,19 +8,19 @@
 
     <div class="mb-3">
       <label class="form-label">Application Name</label>
-      <input class="form-control" [(ngModel)]="application.name" name="name">
+      <input class="form-control" [(ngModel)]="applicationForm.name" name="name">
     </div>
 
     <div class="mb-3">
       <label class="form-label">Notes</label>
-      <textarea class="form-control" [(ngModel)]="application.notes" name="notes"></textarea>
+      <textarea class="form-control" [(ngModel)]="applicationForm.notes" name="notes"></textarea>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Enterprise</label>
 
       <div *ngIf="!addingNewEnterprise">
-        <select class="form-select" [(ngModel)]="application.enterpriseId" name="enterpriseId">
+        <select class="form-select" [(ngModel)]="applicationForm.enterpriseId" name="enterpriseId">
           <option [ngValue]="null">-- Select Enterprise --</option>
           <option *ngFor="let e of enterprises" [ngValue]="e.enterpriseId">{{ e.name }}</option>
         </select>
@@ -35,7 +35,7 @@
         <input
           type="text"
           class="form-control"
-          [(ngModel)]="application.newEnterpriseName"
+          [(ngModel)]="applicationForm.newEnterpriseName"
           name="newEnterpriseName"
           placeholder="Enter new enterprise name"
         >

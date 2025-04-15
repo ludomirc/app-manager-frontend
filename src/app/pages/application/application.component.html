@@ -5,6 +5,73 @@
   </button>
 </div>
 
+<!-- Always-visible filter frame -->
+<!-- Filters Container -->
+<div class="card mb-4 shadow-sm border-0 border-bottom">
+  <!-- Toggle Button in Header -->
+  <div class="card-header bg-transparent border-0 d-flex justify-content-end p-2">
+    <button
+      *ngIf="!showFilters"
+      class="btn btn-outline-secondary btn-xs"
+      style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"
+      (click)="showFilters = true"
+      [attr.aria-expanded]="showFilters"
+      aria-controls="filtersCollapse">
+      Show Filters ▼
+    </button>
+  </div>
+
+  <!-- Collapsible Filter Section -->
+  <div
+    id="filtersCollapse"
+    [ngbCollapse]="!showFilters"
+    class="card-body pt-3 bg-transparent"
+  >
+    <!-- Filter Fields -->
+    <div class="row g-2 align-items-end">
+      <div class="col-lg-2 col-md-3 col-sm-6">
+        <label class="form-label">Position</label>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.name" placeholder="Position" />
+      </div>
+      <div class="col-lg-2 col-md-3 col-sm-6">
+        <label class="form-label">Enterprise</label>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.enterprise" placeholder="Enterprise" />
+      </div>
+      <div class="col-lg-2 col-md-3 col-sm-6">
+        <label class="form-label">Status</label>
+        <select class="form-select form-select-sm" [(ngModel)]="filters.status">
+          <option value="">All</option>
+          <option *ngFor="let status of availableStatuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+      <div class="col-lg-2 col-md-3 col-sm-6">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.date" />
+      </div>
+      <div class="col-lg-2 col-md-3 col-sm-6 d-grid">
+        <label class="form-label invisible">Apply</label>
+        <button class="btn btn-sm btn-outline-secondary" (click)="applyFilters()">Apply</button>
+      </div>
+      <div class="col-lg-2 col-md-3 col-sm-6 d-grid">
+        <label class="form-label invisible">Clear</label>
+        <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Hide Filters Button Below Fields -->
+    <div class="text-end mt-3">
+      <button
+        class="btn btn-outline-secondary btn-xs"
+        style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"
+        (click)="showFilters = false">
+        Hide Filters ▲
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
 <div *ngFor="let app of applications" class="card mb-4 shadow-sm border-0 border-bottom pb-3">
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
