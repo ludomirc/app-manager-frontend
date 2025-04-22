@@ -1,0 +1,56 @@
+<div *ngIf="task" class="card mb-4 shadow-sm border-0 border-bottom pb-3">
+  <div class="card-header bg-white text-dark">
+    Task {{ isNew ? 'Create' : 'Detail' }}: {{ task.name || 'New Task' }}
+  </div>
+
+  <div class="card-body">
+    <div class="mb-2">
+      <label class="form-label">Name:</label>
+      <input type="text" [(ngModel)]="task.name" class="form-control form-control-sm" [readonly]="!isNew">
+    </div>
+
+    <p><strong>Status:</strong></p>
+    <select
+      class="form-select form-select-sm w-auto mb-2"
+      [(ngModel)]="task.status">
+      <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+    </select>
+
+    <div class="mb-2">
+      <label class="form-label">Note:</label>
+      <textarea
+        class="form-control form-control-sm"
+        rows="2"
+        [(ngModel)]="task.note"></textarea>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Due Date:</label>
+      <input
+        type="date"
+        class="form-control form-control-sm"
+        [ngModel]="taskDueDate"
+        (ngModelChange)="taskDueDate = $event">
+    </div>
+
+    <button
+      *ngIf="isNew"
+      class="btn btn-outline-secondary"
+      (click)="onCreate()">
+      Save Task
+    </button>
+
+    <button
+      *ngIf="!isNew"
+      class="btn btn-outline-secondary"
+      (click)="onStatusChange()">
+      Update Status
+    </button>
+
+    <button
+      class="btn btn-outline-secondary"
+      (click)="onCancel()">
+      Close
+    </button>
+  </div>
+</div>

@@ -8,10 +8,15 @@ import {StatusService} from '../../services/status.service';
 import {FormsModule} from '@angular/forms';
 import {StatusHistoryPanelComponent} from './status-history-panel/status-history-panel.component';
 
+import {Task} from '../../models/task';
+import {TaskService} from '../../services/task.service';
+import {TaskDetailPanelComponent} from './task-detail-panel/task-detail-panel.component';
+import {TaskStatusChange} from '../../models/task-status-change';
+
 @Component({
   selector: 'app-application',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbCollapse],
+  imports: [CommonModule, FormsModule, NgbCollapse, TaskDetailPanelComponent],
   templateUrl: './application.component.html',
 })
 export class ApplicationComponent implements OnInit {
@@ -22,10 +27,18 @@ export class ApplicationComponent implements OnInit {
   filters = this.getCleanFilter();
   showFilters: boolean = false;
 
+  taskStatuses: string[] = ['PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
+  tasksByAppId: { [key: number]: Task[] } = {};
+  selectedTask: Task | null = null;
+
+  creatingTaskAppId: number | null = null;
+  newTask: Task = this.getEmptyTask();
+
   constructor(
     private applicationService: ApplicationService,
     private statusService: StatusService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private taskService: TaskService
   ) {
   }
 
@@ -37,7 +50,31 @@ export class ApplicationComponent implements OnInit {
       console.log('Loaded applications:', data);
       this.originalApplications = data;
       this.applications = [...data];
+      this.applications.forEach(app => this.loadTasksForApplication(app.applicationId!));
     });
+  }
+
+  loadTasksForApplication(applicationId: number): void {
+    this.taskService.getTasksByApplicationId(applicationId).subscribe((tasks) => {
+      this.tasksByAppId[applicationId] = tasks;
+    });
+  }
+
+  selectTask(task: Task): void {
+    this.selectedTask = task;
+  }
+
+  updateSelectedTaskStatus(newStatus: string): void {
+    if (this.selectedTask) {
+      const change: TaskStatusChange = {
+        taskId: this.selectedTask.taskId,
+        status: newStatus
+      };
+
+      this.taskService.recordStatusChange(change).subscribe(() => {
+        this.loadTasksForApplication(this.selectedTask!.applicationId);
+      });
+    }
   }
 
   applyFilters(): void {
@@ -95,5 +132,49 @@ export class ApplicationComponent implements OnInit {
       status: '',
       date: ''
     };
+  }
+
+  onAddTask(applicationId: number | undefined): void {
+    if (!applicationId) return;
+
+    const now = new Date().toISOString();
+
+    this.creatingTaskAppId = applicationId;
+    this.newTask = {
+      applicationId,
+      name: '',
+      note: '',
+      status: 'PENDING',
+      createdDate: now,
+      taskDueDate: now,
+      taskId: 0
+    };
+  }
+
+  saveNewTask(task: Task): void {
+    task.taskDueDate = new Date(task.taskDueDate).toISOString();
+    this.taskService.createTask(task).subscribe(saved => {
+      this.loadTasksForApplication(saved.applicationId);
+      this.creatingTaskAppId = null;
+    });
+  }
+
+  private getEmptyTask(): Task {
+    const now = new Date().toISOString();
+    return {
+      taskId: 0,
+      applicationId: 0,
+      createdDate: now,
+      taskDueDate: now,
+      note: '',
+      status: 'PENDING',
+      name: ''
+    };
+  }
+
+  closeTaskPanel(): void {
+    this.selectedTask = null;
+    this.creatingTaskAppId = null;
+    this.newTask = this.getEmptyTask();
   }
 }
