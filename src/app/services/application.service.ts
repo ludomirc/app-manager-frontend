@@ -3,16 +3,19 @@ import {HttpClient} from '@angular/common/http';
 import {Application} from '../models/application.model';
 import {Observable} from 'rxjs';
 
-import {environment} from '../../environments/environment';
+import {ConfigService} from './config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApplicationService {
 
-  private baseUrl = `${environment.apiUrl}/applications`;
+  private get baseUrl(): string {
+    return `${this.configService.apiUrl}/applications`;
+  }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private configService: ConfigService) {
   }
 
   getApplications(): Observable<Application[]> {

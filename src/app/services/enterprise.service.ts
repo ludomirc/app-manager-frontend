@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
-import { environment } from '../../environments/environment';
+import {ConfigService} from './config.service';
 
 export interface Enterprise {
   enterpriseId: number;
@@ -13,16 +13,22 @@ export interface Enterprise {
   providedIn: 'root',
 })
 export class EnterpriseService {
-  private baseUrl = environment.apiUrl;
-  private enterprisesUrl = `${this.baseUrl}/enterprises`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+  }
+
+  private get enterprisesUrl(): string {
+    return `${this.configService.apiUrl}/enterprises`;
+  }
 
   getEnterprises(): Observable<Enterprise[]> {
     return this.http.get<Enterprise[]>(this.enterprisesUrl);
   }
 
   createEnterprise(name: string): Observable<Enterprise> {
-    return this.http.post<Enterprise>(this.enterprisesUrl, { name });
+    return this.http.post<Enterprise>(this.enterprisesUrl, {name});
   }
 }

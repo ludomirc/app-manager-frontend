@@ -1,16 +1,22 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Task } from '../models/task';
-import { TaskStatusChange } from '../models/task-status-change';
-import { Observable } from 'rxjs';
-import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Task} from '../models/task';
+import {TaskStatusChange} from '../models/task-status-change';
+import {ConfigService} from './config.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class TaskService {
 
-  private baseUrl = environment.apiUrl;
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+  }
 
-  constructor(private http: HttpClient) {}
+  private get baseUrl(): string {
+    return this.configService.apiUrl;
+  }
 
   getTasksByApplicationId(applicationId: number): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.baseUrl}/applications/${applicationId}/tasks`);
@@ -28,7 +34,7 @@ export class TaskService {
     return this.http.post<Task>(`${this.baseUrl}/tasks`, task);
   }
 
-  recordStatusChange(taskStatusChange: TaskStatusChange): Observable<TaskStatusChange>  {
+  recordStatusChange(taskStatusChange: TaskStatusChange): Observable<TaskStatusChange> {
     const taskId = taskStatusChange.taskId;
     return this.http.post<TaskStatusChange>(`${this.baseUrl}/task-status-changes/task/${taskId}/status`, taskStatusChange);
   }
