@@ -13,6 +13,11 @@ import {TaskService} from '../../services/task.service';
 import {TaskDetailPanelComponent} from './task-detail-panel/task-detail-panel.component';
 import {TaskStatusChange} from '../../models/task-status-change';
 
+enum APPLICATION_SORT_ORDER {
+  ASCENDING = 'Ascending',
+  DESCENDING = 'Descending',
+}
+
 @Component({
   selector: 'app-application',
   standalone: true,
@@ -33,6 +38,8 @@ export class ApplicationComponent implements OnInit {
 
   creatingTaskAppId: number | null = null;
   newTask: Task = this.getEmptyTask();
+
+  applicationSortOrder: APPLICATION_SORT_ORDER = APPLICATION_SORT_ORDER.DESCENDING;
 
   constructor(
     private applicationService: ApplicationService,
@@ -86,9 +93,17 @@ export class ApplicationComponent implements OnInit {
         app.creationDate &&
         new Date(app.creationDate).toISOString().slice(0, 10) === this.filters.date
       );
-
       return matchesName && matchesEnterprise && matchesStatus && matchesDate;
     });
+
+    this.applications.sort((a, b) => this.applicationDataComparator(a, b));
+  }
+
+  private applicationDataComparator(app1: Application, app2: Application): number {
+    if (!app1.creationDate) return 1;
+    if (!app2.creationDate) return -1;
+    const compressionResult = app1.creationDate.localeCompare(app2.creationDate);
+    return this.applicationSortOrder === APPLICATION_SORT_ORDER.ASCENDING ? compressionResult : -compressionResult;
   }
 
   onAddApplication() {
@@ -177,4 +192,15 @@ export class ApplicationComponent implements OnInit {
     this.creatingTaskAppId = null;
     this.newTask = this.getEmptyTask();
   }
+
+
+  onClickChangeOrder() {
+    this.applicationSortOrder =
+      this.applicationSortOrder === APPLICATION_SORT_ORDER.DESCENDING
+        ? APPLICATION_SORT_ORDER.ASCENDING
+        : APPLICATION_SORT_ORDER.DESCENDING;
+
+    this.applications.sort((a, b) => this.applicationDataComparator(a, b));
+  }
 }
+
