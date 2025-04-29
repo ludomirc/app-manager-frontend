@@ -58,6 +58,7 @@ export class ApplicationComponent implements OnInit {
       this.originalApplications = data;
       this.applications = [...data];
       this.applications.forEach(app => this.loadTasksForApplication(app.applicationId!));
+      this.applications.sort((a, b) => this.applicationDataComparator(a, b));
     });
   }
 
